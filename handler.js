@@ -15,12 +15,14 @@ async function processMailContent(content) {
 
 async function processEvent(event) {
   return Promise.all(event.Records.map(record => {
-    const {content} = JSON.parse(record.Sns.Message);
+    const content = JSON.parse(record.Sns.Message);
+    console.log('content', JSON.stringify(content));
     return processMailContent(content);
   }));
 }
 
 export function handle(event, context, callback) {
+  console.log('event', JSON.stringify(event));
   processEvent(event)
     .then(value => callback(null, value))
     .catch(err => callback(err, null));
